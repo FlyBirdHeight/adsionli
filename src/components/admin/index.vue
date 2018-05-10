@@ -1,6 +1,6 @@
 <template>
     <div>
-        1234561
+        12345612
         <router-view></router-view>
     </div>
 </template>
@@ -14,3 +14,5 @@ export default {
 <style>
 
 </style>
+
+
