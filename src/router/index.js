@@ -8,7 +8,7 @@ export default new Router({
   routes: [
     {
       path:'/',
-      redirect:'/blog'
+      redirect:'/blog',
     },
     {
       path: '/blog',
@@ -67,6 +67,19 @@ export default new Router({
       path:'/chatLogin',
       name:'chatLogin',
       component: resolve => require(['../components/login/chatLogin.vue'], resolve)
+    },{
+      path:'/person',
+      name:'person',
+      component: resolve => require(['../components/blog/person/personInfo.vue'],resolve)
+    },{
+      path:'/notify',
+      name:'notify',
+      component: resolve => require(['../components/notify/index/index.vue'],resolve),
+      children:[{
+        path:'allNotify',
+        name:'allNotify',
+        component: resolve => require(['../components/notify/allNotify/allNotify.vue'],resolve)
+      }]
     }
   ]
 })
