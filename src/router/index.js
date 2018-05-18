@@ -12,6 +12,7 @@ export default new Router({
     },
     {
       path: '/blog',
+      redirect: '/blog/content',
       component: resolve => require(['../components/blog/index/index.vue'], resolve),
       children:[{
         path: 'content',
@@ -22,7 +23,7 @@ export default new Router({
         name: 'personInfo',
         component: resolve => require(['../components/blog/person/personInfo.vue'], resolve),
       },{
-        path: 'blog/:id',
+        path: 'blogInfo/:id',
         name: 'blogContent',
         component: resolve => require(['../components/blog/content/contentInfo.vue'], resolve),
       }]
