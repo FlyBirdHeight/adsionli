@@ -1,8 +1,12 @@
 <template>
-  <div id="app">
+  <div id="app" :style="{'padding-right':right01}">
     <Header></Header>
-    <sider-bar></sider-bar>
+    <sider-bar v-show="siderBarShow"></sider-bar>
+    <div @click="showSiderbar" class="showSider">
+      <span class="glyphicon glyphicon-align-justify"></span>
+    </div>
     <transition name="el-fade-in-linear">
+    
     <div id='goTop' @click='goTop' class="goTop" v-show="toTop">  
       <i class="el-icon-caret-top"></i>
     </div>  
@@ -24,7 +28,9 @@ export default {
   data () {
     return {
       ap: Object,
-      toTop: false 
+      toTop: false,
+      right01:'0px',
+      siderBarShow:false
     }
   },
   mounted () {
@@ -106,7 +112,16 @@ export default {
       {  
         this.toTop = false;  
       }   
-    }  
+    },
+    showSiderbar(){
+      if(this.siderBarShow == true){
+        this.siderBarShow = false;
+        this.right01 = '0px';
+      }else{
+        this.siderBarShow = true;
+        this.right01 = '320px';
+      }
+    }
   }
 }
 </script>
@@ -114,11 +129,22 @@ export default {
 <style>
 .goTop{
   position: fixed;
-  left: 90%;
-  top: 90%;
+  right: 30px;
+  bottom: 35px;
   background-color: black;
   color: #f1f1f1;
   width:20px;
+  z-index: 1050;
+  text-align:center
+}
+.showSider{
+  position: fixed;
+  right: 30px;
+  bottom: 60px;
+  background-color: black;
+  color: #f1f1f1;
+  width:20px;
+  z-index: 1050;
   text-align:center
 }
 </style>

@@ -23,17 +23,21 @@
           <div class="form-group">
             <input type="text" class="form-control" placeholder="Search">
           </div>
-          <button type="submit" class="btn btn-default">查找 </button>
+          <button type="submit" class="btn btn-info">查找 </button>
         </form>
-        <ul class="nav navbar-nav navbar-right">
+        <ul class="nav navbar-nav navbar-right" v-show="!showUser">
           <li class="dropdown">
-            
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img class="user-logo" src="http://onasmniwj.bkt.clouddn.com/avatars/f94a76806a6c142145300d55543adcbc.jpg"> <span class="caret"></span></a>
             <ul class="dropdown-menu">
               <li><a href="#">个人中心</a></li>
               <li><a href="#">消息中心</a></li>
               <li><a href="#">注销</a></li>
             </ul>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right" v-show="showUser" style="margin-top: 10px;">
+          <li>
+            <button type="button" class="btn btn-success navbar-btn">登陆</button>
           </li>
         </ul>
       </div><!-- /.navbar-collapse -->
@@ -52,6 +56,7 @@ export default {
         isActive2:false,
         isActive3:false,
         isActive4:false,
+        showUser:false
       };
     },
     methods: {
@@ -87,7 +92,13 @@ export default {
       }
     },
     mounted(){
-
+      if(sessionStorage.getItem('user')!=null){
+        console.log(123);
+        this.showUser = false;
+      }else{
+        console.log(456)
+        this.showUser = true;
+      }
     }
 }
 </script>
