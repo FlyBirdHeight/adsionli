@@ -1,20 +1,23 @@
 <template>
   <div id="app" :style="{'padding-right':right01}">
     <Header></Header>
-    <sider-bar v-show="siderBarShow"></sider-bar>
+    <transition name="fade" mode="out-in">
+      <router-view style="clear:both"/>
+    </transition>
+    <transition name="slide-fade">
+      <sider-bar v-show="siderBarShow" :siderBarShow="siderBarShow" :showDimmer="showDimmer" @showSiderBar="showSiderBar"></sider-bar>
+    </transition>
     <div @click="showSiderbar" class="showSider">
-      <span class="glyphicon glyphicon-align-justify"></span>
+        <span class="glyphicon glyphicon-align-justify" v-if="showIcon"></span>
+        <span class="glyphicon glyphicon-remove wrapper" v-if="!showIcon"></span>
     </div>
     <transition name="el-fade-in-linear">
-    
-    <div id='goTop' @click='goTop' class="goTop" v-show="toTop">  
-      <i class="el-icon-caret-top"></i>
-    </div>  
+      <div id='goTop' @click='goTop' class="goTop" v-show="toTop">  
+        <i class="el-icon-caret-top"></i>
+      </div>  
     </transition>
-    <router-view style="clear:both"/>
     <div id="aplayer">
     </div>
-    
   </div>
 </template>
 
@@ -30,7 +33,10 @@ export default {
       ap: Object,
       toTop: false,
       right01:'0px',
-      siderBarShow:false
+      siderBarShow:false,
+      show02:false,
+      showDimmer:false,
+      showIcon:true
     }
   },
   mounted () {
@@ -80,6 +86,7 @@ export default {
     this.$nextTick(function () {  
         window.addEventListener('scroll', this.needToTop);  //滚动事件监听  
     });  
+    const that = this;
   },
   components: {
     APlayer,
@@ -114,13 +121,34 @@ export default {
       }   
     },
     showSiderbar(){
+      let width = document.body.clientWidth;
       if(this.siderBarShow == true){
+        this.showDimmer = false;
+        this.show02 = false;
         this.siderBarShow = false;
+        this.showIcon = true;
         this.right01 = '0px';
       }else{
+        this.show02 = true;
         this.siderBarShow = true;
-        this.right01 = '320px';
+        this.showIcon = false;
+        if(width>=1175){
+          this.right01 = '320px';
+        }else{
+          this.right01 = '0px';
+          if(width < 755){
+            this.showDimmer = true;
+          }
+        }
       }
+    },
+    showSiderBar(val){
+      this.showIcon = true;
+      this.showDimmer = false;
+      this.show02 = false;
+      this.siderBarShow = false;
+      this.right01 = '0px';
+
     }
   }
 }
@@ -141,10 +169,47 @@ export default {
   position: fixed;
   right: 30px;
   bottom: 60px;
-  background-color: black;
+  background-color: #000;
   color: #f1f1f1;
   width:20px;
   z-index: 1050;
-  text-align:center
+  text-align:center;
+  border-radius: 25%
 }
+.slide-fade-enter-active {
+  transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-leave-active {
+  transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active for below version 2.1.8 */ {
+  transform: translateX(10px);
+  opacity: 0;
+}
+.fade-enter-active {
+  transition: all .2s ease;
+}
+.fade-leave-active {
+  transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.fade-enter, .fade-leave-to
+/* .slide-fade-leave-active for below version 2.1.8 */ {
+  transform: translateX(-10px);
+  opacity: 0;
+} 
+@keyframes fade-in {  
+  0% {opacity: 0;}
+  40% {opacity: 0;}
+  100% {opacity: 1;}
+}  
+@-webkit-keyframes fade-in {/*针对webkit内核*/  
+  0% {opacity: 0;}  
+  40% {opacity: 0;}  
+  100% {opacity: 1;}  
+}  
+.wrapper {    
+  animation: fade-in 0.5s infinite;
+  -webkit-animation:fade-in 0.5s; 
+}  
 </style>

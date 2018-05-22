@@ -56,7 +56,7 @@ export default {
   data () {
       return {
         screenWidth:document.body.clientWidth,
-        maxWidth:'850px'
+        maxWidth:'755px'
       }
   },
   mounted () {
@@ -67,20 +67,19 @@ export default {
                 that.screenWidth = window.screenWidth
             })()
         }
-        if(this.screenWidth<=850){
+        if(this.screenWidth<=755){
             this.maxWidth = "100%";
         }else{
-            this.maxWidth = "850px";
+            this.maxWidth = "755px";
         }
     },
     watch: {
         screenWidth (val) {
             this.screenWidth = val
-            // console.log(this.screenWidth);
-            if(this.screenWidth<=850){
+            if(this.screenWidth<=755){
                 this.maxWidth = "100%";
             }else{
-                this.maxWidth = "850px";
+                this.maxWidth = "755px";
             }
         }
     }

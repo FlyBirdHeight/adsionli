@@ -1,6 +1,6 @@
 <template>
-  <div>
-      <el-container style="margin:auto;" :style="{width:maxWidth}">
+    <div>
+        <el-container style="margin:auto;" :style="{width:maxWidth}">
             <el-header style="height:100px">
                 <h1 style="text-align:center">手动排查Linux磁盘占用</h1>
                 <div style="margin-top:5px;margin-bottom:30px;text-align:center;">
@@ -39,6 +39,7 @@
             </el-footer>
         </el-container>
   </div>
+
 </template>
 
 <script>
@@ -46,7 +47,7 @@ export default {
     data () {
         return {
             screenWidth:document.body.clientWidth,
-            maxWidth:'850px'
+            maxWidth:'755px'
         }
     },
     mounted () {
@@ -57,10 +58,10 @@ export default {
                 that.screenWidth = window.screenWidth
             })()
         }
-        if(this.screenWidth<=850){
+        if(this.screenWidth<=755){
             this.maxWidth = "100%";
         }else{
-            this.maxWidth = "850px";
+            this.maxWidth = "755px";
         }
     },
     methods: {
@@ -72,10 +73,10 @@ export default {
         screenWidth (val) {
             this.screenWidth = val
             // console.log(this.screenWidth);
-            if(this.screenWidth<=850){
+            if(this.screenWidth<=755){
                 this.maxWidth = "100%";
             }else{
-                this.maxWidth = "850px";
+                this.maxWidth = "755px";
             }
         }
     }
@@ -83,5 +84,10 @@ export default {
 </script>
 
 <style>
-
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
 </style>
