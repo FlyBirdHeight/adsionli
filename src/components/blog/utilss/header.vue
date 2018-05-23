@@ -37,7 +37,7 @@
         </ul>
         <ul class="nav navbar-nav navbar-right" v-show="showUser" style="margin-top: 10px;">
           <li>
-            <button type="button" class="btn btn-success navbar-btn">登陆</button>
+            <button type="button" class="btn btn-success navbar-btn" @click="login()">登陆</button>
           </li>
         </ul>
       </div><!-- /.navbar-collapse -->
@@ -89,6 +89,9 @@ export default {
               localStorage.removeItem('ms_username')
               this.$router.push('/login');
           }
+      },
+      login(){
+        this.$emit('showLogin',true);
       }
     },
     mounted(){

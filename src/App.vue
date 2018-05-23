@@ -1,8 +1,8 @@
 <template>
   <div id="app" :style="{'padding-right':right01}">
-    <Header></Header>
+    <Header  @showLogin="showLogin"></Header>
     <transition name="fade" mode="out-in">
-      <router-view style="clear:both"/>
+    <router-view style="clear:both"/>
     </transition>
     <transition name="slide-fade">
       <sider-bar v-show="siderBarShow" :siderBarShow="siderBarShow" :showDimmer="showDimmer" @showSiderBar="showSiderBar"></sider-bar>
@@ -18,6 +18,35 @@
     </transition>
     <div id="aplayer">
     </div>
+    <el-dialog title="登陆" :visible.sync="dialogFormVisible" :width="width">
+        <el-form ref="form" :model="form" label-width="30%">
+          <el-form-item label="账号：">
+            <el-input v-model="form.email" auto-complete="off" style="width:70%"></el-input>
+          </el-form-item>
+          <el-form-item label="密码：">
+            <el-input v-model="form.password" type="password" auto-complete="off" style="width:70%"></el-input>
+          </el-form-item>
+        </el-form>
+        <div style="margin:auto;text-align:center">
+          <a href="javascript:;" style="font-size:15px;margin-right:10%">
+            <img src="http://p53z0yfgy.bkt.clouddn.com/register-o.png" alt="20*20" width="20px" height="20px" style="margin-top:-5px">
+            <span>注册</span>
+          </a>
+          <a href="javascript:;">
+            <span><i class="el-icon-d-arrow-right" />  忘记密码</span>
+          </a>
+        </div>
+        <div style="margin-top:20px"> 
+          <a href="javascript:;" style="font-size:14px">
+            <img src="http://p53z0yfgy.bkt.clouddn.com/github.png" alt="20*20" width="20px" height="20px" style="margin-top:-5px">
+            <span>使用github登陆</span>
+          </a>
+        </div>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="submitEdit">确 定</el-button>
+        </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -36,7 +65,13 @@ export default {
       siderBarShow:false,
       show02:false,
       showDimmer:false,
-      showIcon:true
+      showIcon:true,
+      form:{
+        email:"",
+        password:""
+      },
+      dialogFormVisible:false,
+      width:'35%'
     }
   },
   mounted () {
@@ -149,7 +184,24 @@ export default {
       this.siderBarShow = false;
       this.right01 = '0px';
 
-    }
+    },
+    showLogin(val){
+      this.dialogFormVisible = val;
+      let w = document.body.clientWidth;
+      if(w>=1335){
+        this.width = "25%"
+      }else if(w<1335&&w>=875){
+        this.width = "40%"
+      }else if(w<875&&w>=500){
+        this.width = "60%"
+      }else{
+        this.width = "80%"
+      }
+      console.log()
+    },
+    submitEdit(){
+
+    },
   }
 }
 </script>

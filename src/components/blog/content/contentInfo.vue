@@ -36,6 +36,51 @@
             </el-main>
             <el-footer>
                 <a href="javascropt:;" @click="seeTag(1)"><el-tag size="mini">#Linux</el-tag></a>
+                <div style="border-top:1px solid rgb(217,217,217);margin-top:10px;padding: 10px;white-space:nowrap;overflow: hidden;width:100%" :style="{width:maxWidth}">
+                    <div style="display:inline-block;width:50%;white-space:normal">
+                        <a href="javascript:;" @click="changeContent(1)" class="navItem"><i class="glyphicon glyphicon-chevron-left" />123</a>
+                    </div>
+                    <div style="display:inline-block;width:50%;white-space:normal;text-align: right;">
+                        <a href="javascript:;" @click="changeContent(2)" class="navItem">456<i class="glyphicon glyphicon-chevron-right" /></a>
+                    </div>
+                </div>
+                <div style="width:100%;padding:10px;text-align:center">
+                    <el-button type="success" style="box-shadow: 5px 5px 5px #888888;" @click="login()">登陆并参与评论</el-button>
+                </div>
+                <div style="width:100%;padding:10px;text-align:center">
+                    <el-container style="margin-top:15px;margin-bottom:30px">
+                        <el-aside width="20%">
+                            <img src="http://p53z0yfgy.bkt.clouddn.com/cat.gif" alt="64*64" width="60px" height="60px" style="border-radius:50%;border: 2px solid rgb(217,217,217);">
+                        </el-aside>
+                        <el-container>
+                            <el-header style="text-align:left;height:30px">
+                                <a href="javascript:;"><span style="color:rgb(103,197,58);font-size:1.2em;font-weight:600">AdsionLi</span></a>
+                                <div style="display: inline-block;margin-left: 0.5em;color: rgba(0, 0, 0, 0.4);font-size: 0.875em;font-weight:600">
+                                    2018-05-22
+                                </div>
+                            </el-header>
+                            <el-main style="text-align:left;padding-top:0px;height:auto;border:1px solid rgb(217,217,217);border-radius:5px;background-color: #fff;box-shadow: 5px 5px 5px #f1f2f3;">
+                                123456
+                            </el-main>
+                        </el-container>
+                    </el-container>
+                    <el-container style="margin-top:15px;margin-bottom:30px">
+                        <el-aside width="20%">
+                            <img src="http://p53z0yfgy.bkt.clouddn.com/cat.gif" alt="64*64" width="60px" height="60px" style="border-radius:50%;border: 2px solid rgb(217,217,217);">
+                        </el-aside>
+                        <el-container>
+                            <el-header style="text-align:left;height:30px">
+                                <a href="javascript:;"><span style="color:rgb(103,197,58);font-size:1.2em;font-weight:600">AdsionLi</span></a>
+                                <div style="display: inline-block;margin-left: 0.5em;color: rgba(0, 0, 0, 0.4);font-size: 0.875em;font-weight:600">
+                                    2018-05-22
+                                </div>
+                            </el-header>
+                            <el-main style="text-align:left;padding-top:0px;height:auto;border:1px solid rgb(217,217,217);border-radius:5px;background-color: #fff;box-shadow: 5px 5px 5px #f1f2f3;">
+                                123456
+                            </el-main>
+                        </el-container>
+                    </el-container>
+                </div>
             </el-footer>
         </el-container>
   </div>
@@ -47,7 +92,7 @@ export default {
     data () {
         return {
             screenWidth:document.body.clientWidth,
-            maxWidth:'755px'
+            maxWidth:'755px',
         }
     },
     mounted () {
@@ -67,12 +112,17 @@ export default {
     methods: {
         seeTag(id){
             console.log("123456");
-        }
+        },
+        changeContent(id){
+            console.log(id);
+        },
+        login(){
+            this.$emit('showLogin',true);
+        },
     },
     watch: {
         screenWidth (val) {
             this.screenWidth = val
-            // console.log(this.screenWidth);
             if(this.screenWidth<=755){
                 this.maxWidth = "100%";
             }else{
@@ -90,4 +140,41 @@ export default {
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
+.navItem{
+    position: relative;
+    display: inline-block;
+    line-height: 25px;
+    font-size: 14px;
+    color: #555;
+    border-bottom: none;
+    text-decoration: none
+}
+.navItem:visited{
+    position: relative;
+    display: inline-block;
+    line-height: 25px;
+    font-size: 14px;
+    color: #333;
+    border-bottom: none;
+    text-decoration: none
+}
+.navItem:hover{
+    position: relative;
+    display: inline-block;
+    line-height: 25px;
+    font-size: 14px;
+    color: #333;
+    border-bottom: none;
+    text-decoration: none
+}
+.navItem:active{
+    position: relative;
+    display: inline-block;
+    line-height: 25px;
+    font-size: 14px;
+    color: #333;
+    border-bottom: none;
+    text-decoration: none
+}
+
 </style>

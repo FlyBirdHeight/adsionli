@@ -10,11 +10,19 @@
             </div>
             <div style="padding-top:20px">
                 <span>
-                    <a href="https://coding.net/u/Adsionli">Coding</a>
+                    <a href="https://github.com/FlyBirdHeight" class="spanIcon" target="_blank">
+                        <img src="http://p53z0yfgy.bkt.clouddn.com/github%20%281%29.png" alt="20*20" width="20px" height="20px"> Github
+                    </a>
                 </span>
-                <span>
-                    
+                <span style="margin-left:5px">
+                    <i style="border:1px solid #999"></i>
                 </span>
+                <span style="margin-left:5px">
+                    <a href="https://coding.net/u/Adsionli" class="spanIcon" target="_blank"> 
+                        <img src="http://p53z0yfgy.bkt.clouddn.com/CN_coding.net.png" alt="20*20" width="20px" height="20px">Coding
+                    </a>
+                </span>
+                
             </div>
         </div>
     </div>
@@ -82,5 +90,13 @@ export default {
         text-align: center;
         font-size: 14px;
         color: #999;
+    }
+    .spanIcon{
+        color:#fff;
+        text-decoration: none;
+    }
+    .spanIcon:hover{
+        color:#fff;
+        text-decoration: none;
     }
 </style>

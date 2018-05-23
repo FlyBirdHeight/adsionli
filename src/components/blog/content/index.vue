@@ -126,7 +126,7 @@ a:before {
   height: 2px;
   bottom: 0;
   left: 0;
-  background-color: #000;
+  background-color: rgb(217,217,217);
   visibility: hidden;
   -webkit-transform: scaleX(0);
   -o-transform: scaleX(0);
