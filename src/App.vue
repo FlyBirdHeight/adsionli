@@ -28,7 +28,7 @@
           </el-form-item>
         </el-form>
         <div style="margin:auto;text-align:center">
-          <a href="javascript:;" style="font-size:15px;margin-right:10%">
+          <a href="javascript:;" style="font-size:15px;margin-right:20%" @click="register()">
             <img src="http://p53z0yfgy.bkt.clouddn.com/register-o.png" alt="20*20" width="20px" height="20px" style="margin-top:-5px">
             <span>注册</span>
           </a>
@@ -36,7 +36,7 @@
             <span><i class="el-icon-d-arrow-right" />  忘记密码</span>
           </a>
         </div>
-        <div style="margin-top:20px"> 
+        <div style="margin-top:20px;text-align:center"> 
           <a href="javascript:;" style="font-size:14px">
             <img src="http://p53z0yfgy.bkt.clouddn.com/github.png" alt="20*20" width="20px" height="20px" style="margin-top:-5px">
             <span>使用github登陆</span>
@@ -189,7 +189,7 @@ export default {
       this.dialogFormVisible = val;
       let w = document.body.clientWidth;
       if(w>=1335){
-        this.width = "25%"
+        this.width = "30%"
       }else if(w<1335&&w>=875){
         this.width = "40%"
       }else if(w<875&&w>=500){
@@ -202,6 +202,10 @@ export default {
     submitEdit(){
 
     },
+    register(){
+      this.dialogFormVisible = false;
+      this.$router.push('/register');
+    }
   }
 }
 </script>

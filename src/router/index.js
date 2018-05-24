@@ -11,6 +11,11 @@ export default new Router({
       redirect:'/blog',
     },
     {
+      path:'/register',
+      name:"register",
+      component: resolve => require(['../components/register/register.vue'], resolve),
+    },
+    {
       path: '/blog',
       redirect: '/blog/content',
       component: resolve => require(['../components/blog/index/index.vue'], resolve),
