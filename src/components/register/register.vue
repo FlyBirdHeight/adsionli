@@ -9,7 +9,7 @@
                     <el-input type="email" v-model="ruleForm2.email" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" prop="pass" style="margin-top:-10px">
-                    <el-input type="password" v-model="ruleForm2.password" auto-complete="off"></el-input>
+                    <el-input type="password" v-model="ruleForm2.pass" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="确认密码" prop="checkPass" style="margin-top:-10px">
                     <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off"></el-input>
@@ -22,7 +22,9 @@
         </div>
         <div style="text-align:center;margin-top:10px">
             <div style="color:#747474;font-weight:400">已经拥有账户？</div>
-            <div><a href="javascript:;" style="font-family:gotham,helvetica,arial,sans-serif;font-style:normal;font-size:16px;font-weight:400;text-decoration:none;color:#15b982">登录</a></div>
+            <div>
+              <a href="javascript:;" style="font-family:gotham,helvetica,arial,sans-serif;font-style:normal;font-size:16px;font-weight:400;text-decoration:none;color:#15b982" @click="gotoLogin()">登录</a>
+            </div>
         </div>
     </div>
 </template>
@@ -59,7 +61,7 @@ export default {
       var validatePass2 = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请再次输入密码'));
-        } else if (value !== this.ruleForm2.password) {
+        } else if (value !== this.ruleForm2.pass) {
           callback(new Error('两次输入密码不一致!'));
         } else {
           callback();
@@ -103,7 +105,7 @@ export default {
       }
       return {
         ruleForm2: {
-          password: '',
+          pass: '',
           checkPass: '',
           age: '',
           email:'',
@@ -136,7 +138,7 @@ export default {
             this.loading = true;
             let data = this.ruleForm2;
             this.axios.post('/api/v1/add/user',{
-                'name':data.name,'email':data.email,'password':data.password
+                'name':data.name,'email':data.email,'password':data.pass
             }).then((res) => {
                 console.log(res.data);
                 if(res.data.status=="success"){
@@ -147,6 +149,27 @@ export default {
                         type: 'success',
                         duration: 0
                     });
+                }else if(res.data.status=="true"){
+                    this.loading = false;
+                    this.$notify.error({
+                        title: '注册失败',
+                        message: '注册失败，你已经完成了注册且认证过，请勿重新注册！',
+                        duration: 0
+                    });
+                }else if(res.data.status=="overtime"){
+                    this.loading = false;
+                    this.$notify.error({
+                        title: '注册失败',
+                        message: '注册失败，你超过一小时未进行邮箱验证，请重新注册！',
+                        duration: 0
+                    });
+                }else{
+                  this.loading = false;
+                  this.$notify.error({
+                      title: '注册失败',
+                      message: '注册失败，你已经完成了注册，请前往邮箱验证，可能存在于邮箱垃圾箱中！',
+                      duration: 0
+                  });
                 }
             }).catch((error) => {
                 console.log(error);
@@ -165,6 +188,9 @@ export default {
       },
       resetForm(formName) {
         this.$refs[formName].resetFields();
+      },
+      gotoLogin(){
+        this.$router.push('/login');
       }
     }
 }

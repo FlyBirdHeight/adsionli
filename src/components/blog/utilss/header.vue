@@ -38,6 +38,7 @@
         <ul class="nav navbar-nav navbar-right" v-show="showUser" style="margin-top: 10px;">
           <li>
             <button type="button" class="btn btn-success navbar-btn" @click="login()">登陆</button>
+            <button type="button" style="margin-left:15px" class="btn btn-info navbar-btn" @click="register()">注册</button>
           </li>
         </ul>
       </div><!-- /.navbar-collapse -->
@@ -92,6 +93,9 @@ export default {
       },
       login(){
         this.$emit('showLogin',true);
+      },
+      register(){
+        this.$router.push('/register');
       }
     },
     mounted(){

@@ -268,4 +268,36 @@ export default {
   animation: fade-in 0.5s infinite;
   -webkit-animation:fade-in 0.5s; 
 }  
+a {
+  position: relative;
+  color: #000;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #555;
+  text-decoration: none;
+}
+a:before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: rgb(217,217,217);
+  visibility: hidden;
+  -webkit-transform: scaleX(0);
+  -o-transform: scaleX(0);
+  transform: scaleX(0);
+  -webkit-transition: all 0.3s ease-in-out 0s;
+  -o-transition: all 0.3s ease-in-out 0s;
+  transition: all 0.3s ease-in-out 0s;
+}
+a:hover:before {
+  visibility: visible;
+  -webkit-transform: scaleX(1);
+  -o-transform: scaleX(1);
+  transform: scaleX(1);
+}
 </style>

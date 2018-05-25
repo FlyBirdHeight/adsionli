@@ -16,6 +16,11 @@ export default new Router({
       component: resolve => require(['../components/register/register.vue'], resolve),
     },
     {
+      path:'/success/:token',
+      name:'success',
+      component: resolve => require(['../components/register/success.vue'], resolve),
+    },
+    {
       path: '/blog',
       redirect: '/blog/content',
       component: resolve => require(['../components/blog/index/index.vue'], resolve),
@@ -62,7 +67,7 @@ export default new Router({
         component: resolve => require(['../components/admin/content/content.vue', resolve])
       }]
     },{
-      path:'/blogLogin',
+      path:'/login',
       name:'blogLogin',
       component: resolve => require(['../components/login/blogLogin.vue'], resolve)
     },{
