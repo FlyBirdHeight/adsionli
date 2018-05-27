@@ -1,8 +1,8 @@
 <template>
   <div id="app" :style="{'padding-right':right01}">
-    <Header  @showLogin="showLogin"></Header>
+    <Header @showLogin="showLogin"></Header>
     <transition name="fade" mode="out-in">
-    <router-view style="clear:both"/>
+    <router-view style="clear:both" />
     </transition>
     <transition name="slide-fade">
       <sider-bar v-show="siderBarShow" :siderBarShow="siderBarShow" :showDimmer="showDimmer" @showSiderBar="showSiderBar"></sider-bar>
@@ -71,7 +71,7 @@ export default {
         password:""
       },
       dialogFormVisible:false,
-      width:'35%'
+      width:'35%',
     }
   },
   mounted () {
@@ -197,7 +197,6 @@ export default {
       }else{
         this.width = "80%"
       }
-      console.log()
     },
     submitEdit(){
 
@@ -205,6 +204,10 @@ export default {
     register(){
       this.dialogFormVisible = false;
       this.$router.push('/register');
+    },
+    showUser(val){
+      this.showInfo = val;
+      console.log(this.showInfo);
     }
   }
 }

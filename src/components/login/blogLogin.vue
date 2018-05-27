@@ -1,6 +1,6 @@
 <template>
     <div class="bolg_login">
-        <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="20%" class="demo-ruleForm" label-position="top" style="padding: 20px;">
+        <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="20%" class="demo-ruleForm" label-position="top" style="padding: 20px;" v-loading="loadingLogin">
             <el-form-item label="邮箱" prop="email" style="margin-top:-10px">
                 <el-input type="email" v-model="ruleForm.email" auto-complete="off"></el-input>
             </el-form-item>
@@ -23,7 +23,7 @@
                 </a>
             </div>
             <el-form-item style="text-align:center">
-                <el-button type="primary" @click="submitForm2('ruleForm')" v-loading="loadingLogin">提交</el-button>
+                <el-button type="primary" @click="submitForm2('ruleForm')">提交</el-button>
                 <el-button @click="resetForm2('ruleForm')">重置</el-button>
             </el-form-item>
         </el-form>
@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import Bus from '../Bus.js'
 export default {
     data () {
         var loginPassword = (rule, value, callback) => {
@@ -75,17 +76,21 @@ export default {
                 if (valid) {
                     this.loadingLogin = true;
                     let data = this.ruleForm;
-                    this.axios.post('/api/v1/lgoin',{
-                        'email':data.loginEmail,'password':data.loginPassword
+                    this.axios.post('/api/v1/login',{
+                        'email':data.email,'password':data.password
                     }).then((res) => {
-                        console.log(res.data);
                         if(res.data.status=="success"){
                             this.loadingLogin = false;
+                            Bus.$emit('userInfo',true);
+                            sessionStorage.setItem('user',JSON.stringify(res.data.userInfo));
+                            this.axios.defaults.headers.common['Authorization'] = res.data.token_type + ' ' + res.data.access_token;
+                            sessionStorage.setItem('token',res.data.token_type + ' ' + res.data.access_token);
                             this.$notify({
                                 title: '登陆成功',
                                 message: '欢迎来到AdsionLi的个人网站进行交流',
                                 type: 'success',
                             });
+                            this.$router.push('/');
                         }
                     }).catch((error) => {
                         console.log(error);

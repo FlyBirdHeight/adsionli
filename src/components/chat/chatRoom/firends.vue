@@ -1,5 +1,7 @@
 <template>
-    
+    <div>
+        <h1>firends</h1>
+    </div>
 </template>
 
 <script>

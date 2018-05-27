@@ -44,8 +44,18 @@
                         <a href="javascript:;" @click="changeContent(2)" class="navItem">456<i class="glyphicon glyphicon-chevron-right" /></a>
                     </div>
                 </div>
-                <div style="width:100%;padding:10px;text-align:center">
+                <div style="width:100%;padding:10px;text-align:center" v-if="showTextArea==false">
                     <el-button type="success" style="box-shadow: 5px 5px 5px #888888;" @click="login()">登陆并参与评论</el-button>
+                </div>
+                <div style="width:100%;padding:10px;text-align:center" v-else>
+                    <el-input
+                        type="textarea"
+                        :rows="5"
+                        placeholder="欢迎评论，支持markdown语法"
+                        v-model="comment"
+                        style="margin-left:2%"
+                        >
+                    </el-input>
                 </div>
                 <div style="width:100%;padding:10px;text-align:center">
                     <el-container style="margin-top:15px;margin-bottom:30px">
@@ -88,14 +98,22 @@
 </template>
 
 <script>
+import Bus from '../../Bus.js'
 export default {
     data () {
         return {
             screenWidth:document.body.clientWidth,
             maxWidth:'755px',
+            showTextArea:false,
+            comment:''
         }
     },
     mounted () {
+        if(sessionStorage.getItem('user')!=null){
+            this.showTextArea = true;
+        }else{
+            this.showTextArea = false;
+        }
         const that = this;
         window.onresize = () => {
             return (() => {
@@ -108,6 +126,7 @@ export default {
         }else{
             this.maxWidth = "755px";
         }
+        console.log(this.showTextArea)
     },
     methods: {
         seeTag(id){
@@ -119,6 +138,11 @@ export default {
         login(){
             this.$emit('showLogin',true);
         },
+        bus(){
+            Bus.$on('userInfo',(e) => {
+                this.showTextArea = e;
+            })
+        }
     },
     watch: {
         screenWidth (val) {

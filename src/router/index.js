@@ -86,11 +86,6 @@ export default new Router({
       path:'/notify',
       name:'notify',
       component: resolve => require(['../components/notify/index/index.vue'],resolve),
-      children:[{
-        path:'allNotify',
-        name:'allNotify',
-        component: resolve => require(['../components/notify/allNotify/allNotify.vue'],resolve)
-      }]
     }
   ]
 })
