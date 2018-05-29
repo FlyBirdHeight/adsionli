@@ -56,8 +56,9 @@
                         style="margin-left:2%"
                         >
                     </el-input>
+                     <el-button type="primary" style="float:right;margin-top:15px">评论</el-button>
                 </div>
-                <div style="width:100%;padding:10px;text-align:center">
+                <div style="width:100%;margin-top:40px;padding:10px;text-align:center">
                     <el-container style="margin-top:15px;margin-bottom:30px">
                         <el-aside width="20%">
                             <img src="http://p53z0yfgy.bkt.clouddn.com/cat.gif" alt="64*64" width="60px" height="60px" style="border-radius:50%;border: 2px solid rgb(217,217,217);">
@@ -136,7 +137,7 @@ export default {
             console.log(id);
         },
         login(){
-            this.$emit('showLogin',true);
+            this.$router.push('/login');
         },
         bus(){
             Bus.$on('userInfo',(e) => {
