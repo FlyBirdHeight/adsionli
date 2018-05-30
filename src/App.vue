@@ -19,11 +19,11 @@
     <div id="aplayer">
     </div>
     <el-dialog title="登陆" :visible.sync="dialogFormVisible" :width="width">
-        <el-form ref="form" :model="form" label-width="30%">
-          <el-form-item label="账号：">
+        <el-form ref="form" :model="form" label-width="30%" :rules="rules2" status-icon>
+          <el-form-item label="账号：" prop="email">
             <el-input v-model="form.email" auto-complete="off" style="width:70%"></el-input>
           </el-form-item>
-          <el-form-item label="密码：">
+          <el-form-item label="密码：" prop="password">
             <el-input v-model="form.password" type="password" auto-complete="off" style="width:70%"></el-input>
           </el-form-item>
         </el-form>
@@ -44,7 +44,7 @@
         </div>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="submitEdit">确 定</el-button>
+            <el-button type="primary" @click="submitEdit('form')">确 定</el-button>
         </div>
     </el-dialog>
   </div>
@@ -54,10 +54,31 @@
 import 'APlayer/dist/APlayer.min.css';
 import APlayer from 'APlayer';
 import Header from './components/blog/utilss/header';
-import siderBar from './components/blog/utilss/siderbar';                           
+import siderBar from './components/blog/utilss/siderbar';    
+import Bus from './components/Bus.js'                       
 export default {
   name: 'App',
   data () {
+     var loginPassword = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入密码'));
+      } else {
+        callback();
+      }
+    };
+    var loginEmail = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('邮箱不能为空'));
+      }
+      var reg = new RegExp("^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$");
+      setTimeout(() => {
+        if (!reg.test(value)) {
+          callback(new Error('邮箱格式不正确'));
+        } else {
+          callback();
+        }
+      }, 300);
+    };
     return {
       ap: Object,
       toTop: false,
@@ -69,6 +90,14 @@ export default {
       form:{
         email:"",
         password:""
+      },
+      rules2: {
+        password: [ 
+          { validator: loginPassword, trigger: 'blur' }
+        ],
+        email: [
+          {validator: loginEmail, trigger:'blur'}
+        ],
       },
       dialogFormVisible:false,
       width:'35%',
@@ -198,8 +227,44 @@ export default {
         this.width = "80%"
       }
     },
-    submitEdit(){
-
+    submitEdit(formName){
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          // this.loadingLogin = true;
+          let data = this.form;
+          this.axios.post('/api/v1/login',{
+            'email':data.email,'password':data.password
+          }).then((res) => {
+            if(res.data.status=="success"){
+              this.loadingLogin = false;
+              Bus.$emit('userInfo',true);
+              sessionStorage.setItem('user',JSON.stringify(res.data.userInfo));
+              this.axios.defaults.headers.common['Authorization'] = res.data.token_type + ' ' + res.data.access_token;
+              sessionStorage.setItem('token',res.data.token_type + ' ' + res.data.access_token);
+              this.$notify({
+                title: '登陆成功',
+                message: '欢迎来到AdsionLi的个人网站进行交流',
+                type: 'success',
+              });
+              // this.$router.push('/');
+              this.dialogFormVisible = false;
+            }
+          }).catch((error) => {
+            console.log(error);
+            this.$notify.error({
+              title: '登陆失败',
+              message: '登陆失败，网络故障稍后再试！',
+            });
+            this.dialogFormVisible = false;
+          })
+        } else {
+          this.$notify.error({
+            title: '登陆失败',
+            message: '登陆失败，请确认信息填写完全！',
+          });
+          return false;
+        }
+    });
     },
     register(){
       this.dialogFormVisible = false;

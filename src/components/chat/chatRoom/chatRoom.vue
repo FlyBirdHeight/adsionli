@@ -3,15 +3,12 @@
         <el-container class="el-container_chat">
             <el-aside style="width:20%" class="el-aside_chat">
                 <div class="charLine_text">
-                    <div style="width:60%;padding-left:10px;display:inline-block">
+                    <div style="width:95%;padding-left:5px;display:inline-block">
                         <el-input
                             placeholder="查找好友或群聊"
                             prefix-icon="el-icon-search"
                             v-model="search">
                         </el-input>
-                    </div>
-                    <div style="width:30%;display:inline-block;padding-left:5px">
-                        <el-button type="primary" icon="el-icon-circle-plus-outline" size="mini">添加群聊</el-button>
                     </div>
                 </div>
                 <div class="charLine_out">
@@ -22,7 +19,7 @@
                         <div class="chatLine-inline" style="width:60%;font-weight:600;font-size:14px;margin-top:-10px">
                             <span style="margin-top:-10px">PUBG吃鸡小分队</span>
                         </div>
-                        <el-button type="info" icon="el-icon-close" circle style="right:-10px;width: 15px;height: 15px;margin-left: -10px;position: relative;top: -5px;" :class="btn_active==1?'':'showButton'"></el-button>
+                        <el-button type="info" icon="el-icon-close" circle style="right:-5px;width: 15px;height: 15px;margin-left: -10px;position: relative;top: -5px;" :class="btn_active==1?'':'showButton'"></el-button>
                     </div>
                     <div class="charLine" @click="chatRoomChat(2,'猪猪')" :class="active==2?'charLineActive':''">
                         <div class="chatLine-inline">
@@ -31,28 +28,37 @@
                         <div class="chatLine-inline" style="width:60%;font-weight:600;font-size:14px;margin-top:-10px">
                             <span style="margin-top:-10px">猪猪</span>
                         </div>
-                        <el-button type="info" icon="el-icon-close" circle style="right:-10px;width: 15px;height: 15px;margin-left: -10px;position: relative;top: -5px;" :class="btn_active==2?'':'showButton'"></el-button>
+                        <el-button type="info" icon="el-icon-close" circle style="right:-5px;width: 15px;height: 15px;margin-left: -10px;position: relative;top: -5px;" :class="btn_active==2?'':'showButton'"></el-button>
                     </div>
                 </div>
             </el-aside>
             <el-container>
                 <el-header style="height:50px;padding:0 0">
-                    <charHeader :showName="showName"></charHeader>
+                    <charHeader :showName="showName" @showSiderInfo="showSiderInfo"></charHeader>
                 </el-header>
-                <el-main>Main</el-main>
+                <el-main style="padding:0">
+                    <chat-room-body :showSider='showSiderInfo01'/>
+                </el-main>
             </el-container>
         </el-container>
     </div>
 </template>
 
 <script>
-import charHeader from '../header/header'
+import charHeader from '../header/header';
+import chatRoomBody from '../chatRoom/chatRoomBody'
 export default {
     methods: {
         chatRoomChat(data,vechar){
             this.active = data;
             this.btn_active = data;
             this.showName = vechar;
+        },
+        addRoom(){
+            console.log('addRoom');
+        },
+        showSiderInfo(data){
+            this.showSiderInfo01 = data;
         }
     },
     data () {
@@ -61,11 +67,13 @@ export default {
             btn_active:0,
             active_num:'active',
             search:'',
-            showName:"公频"
+            showName:"公频",
+            showSiderInfo01:false
         }
     },
     components: {
-        charHeader
+        charHeader,
+        chatRoomBody
     }
 }
 </script>
@@ -84,7 +92,7 @@ export default {
 }
 .charLine{
     height: 80px;
-    width: 100%;
+    width: 95%;
     text-align: left;
     line-height: 80px;
     overflow-x: hidden;
