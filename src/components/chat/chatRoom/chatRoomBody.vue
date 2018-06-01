@@ -3,10 +3,19 @@
         <sider v-show="showSider"/>
         <div class="chatBody_something">
             <div class="showchat_body">
-                123
+                <ul class="chat_message">
+                    <li>
+                        <p>Adsionli 2018/5/31 0:13:00</p>
+                        <span>123</span>
+                    </li>
+                    <li>
+                        <p>Adsionli 2018/5/31 0:13:00</p>
+                        <span>123</span>
+                    </li>
+                </ul>
             </div>
             <div class="showchat_input">
-                <mavon-editor v-model="value" :toolbars="toolbars" style="min-height:260px"/>
+                <mavon-editor ref=md v-model="value" :toolbars="toolbars" style="min-height:260px;max-height:260px" :subfield="true" :ishljs = "true" @imgAdd="$imgAdd"/>
                 <div style="height:40px">
                     <el-button style="float:right;margin-right:20px;margin-top:7px" size="mini" type="primary" @click="sendMail()">发送</el-button>
                 </div>
@@ -29,8 +38,8 @@ export default {
                 bold: true, // 粗体
                 italic: true,// 斜体
                 header: true,// 标题
-                // subfield: true, // 单双栏模式
-                // preview: true, // 预览
+                subfield: true, // 单双栏模式
+                preview: true, // 预览
                 link: true, // 链接
                 imagelink: true, // 图片链接
                 code: true, // code
@@ -40,6 +49,20 @@ export default {
     methods: {
         sendMail(){
             console.log(this.value);
+        },
+        $imgAdd(pos, $file){
+            var formdata = new FormData();
+            var user = JSON.parse(sessionStorage.getItem('user'));
+            formdata.append('image', $file);
+            formdata.append('userId',user.id);
+            this.axios({
+                url: '/api/v1/upload/image',
+                method: 'post',
+                data: formdata,
+                headers: { 'Content-Type': 'multipart/form-data' },
+            }).then((url) => {
+                this.$refs.md.$img2Url(pos, url.data.response.url);
+            })
         }
     }   
 }
@@ -61,5 +84,16 @@ export default {
 }
 .showchat_setting{
     height: 30px;
+}
+.chat_message{
+    margin-left: -5px;
+    list-style: none;
+}
+.chat_message li p{
+    font-size: 15px;
+    font-weight: bolder
+}
+.chat_message li{
+    margin-top: 15px
 }
 </style>

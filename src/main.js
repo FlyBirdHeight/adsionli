@@ -12,6 +12,8 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min'
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
+import Highlight from './components/highlight'
+Vue.use(Highlight)
 // use
 Vue.use(mavonEditor)
 import axios from 'axios';
@@ -22,5 +24,5 @@ new Vue({
   el: '#app',
   router,
   components: { App },
-  template: '<App/>'
+  template: '<App/>',
 })
