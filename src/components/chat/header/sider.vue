@@ -37,7 +37,7 @@ export default {
         width: 200px;
         position: absolute;
         right: 16px;
-        z-index: 1040;
+        z-index: 1550;
         box-shadow:0 2px 6px rgb(217, 217, 217);
         background: #fff;
         color: #000;

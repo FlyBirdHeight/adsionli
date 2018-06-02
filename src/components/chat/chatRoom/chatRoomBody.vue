@@ -6,11 +6,11 @@
                 <ul class="chat_message">
                     <li>
                         <p>Adsionli 2018/5/31 0:13:00</p>
-                        <span>123</span>
+                        <div>123</div>
                     </li>
                     <li>
                         <p>Adsionli 2018/5/31 0:13:00</p>
-                        <span>123</span>
+                        <vue-markdown v-highlight :source="content"></vue-markdown>
                     </li>
                 </ul>
             </div>
@@ -26,10 +26,12 @@
 
 <script>
 import sider from '../header/sider';
+import VueMarkdown from 'vue-markdown';
 export default {
     props: ['showSider'],
     components: {
-        sider
+        sider,
+        VueMarkdown,
     },
     data () {
         return {
@@ -43,7 +45,9 @@ export default {
                 link: true, // 链接
                 imagelink: true, // 图片链接
                 code: true, // code
-            }
+                htmlcode: true,
+            },
+            content:'![11.jpg](http://127.0.0.1/images/152785613311.jpg)'
         }
     },
     methods: {
@@ -95,5 +99,12 @@ export default {
 }
 .chat_message li{
     margin-top: 15px
+}
+.chat_message li div{
+    margin-left: 10px
+}
+.chat_message li div image{
+    width: 150px;
+    height: 150px;
 }
 </style>
