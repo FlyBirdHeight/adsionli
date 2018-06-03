@@ -131,9 +131,7 @@ export default {
             this.axios.post('/api/v1/add/comment',{
                 'blog_id':this.$route.params.id,'user_id':JSON.parse(sessionStorage.getItem('user')).id,'body':this.comment
             }).then((res) => {
-                // console.log(res.data)
                 if(res.data.status=='success'){
-                    // console.log(res.data.response)
                     this.blog.comment.splice(0,0,res.data.response);
                 }
             }).catch((error) => {
