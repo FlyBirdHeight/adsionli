@@ -28,7 +28,7 @@
                     <charHeader :showName="showName" @showSiderInfo="showSiderInfo"></charHeader>
                 </el-header>
                 <el-main style="padding:0">
-                    <chat-room-body :showSider='showSiderInfo01'/>
+                    <chat-room-body :showSider='showSiderInfo01' :roomId='roomId' :clientName='user.name' @sendMessage="websocketsend" />
                 </el-main>
             </el-container>
         </el-container>
@@ -38,6 +38,7 @@
 <script>
 import charHeader from '../header/header';
 import chatRoomBody from '../chatRoom/chatRoomBody'
+import VueMarkdown from 'vue-markdown';
 export default {
     methods: {
         chatRoomChat(data,vechar){
@@ -81,8 +82,16 @@ export default {
             this.ws.onmessage = this.websocketonmessage;
         },
         websocketonmessage(e){ //数据接收
-            console.log(e);
-            // document.getElementById("content").innerHTML += "<span>" + e.data + "</span><br>";
+            e = JSON.parse(e.data);
+            console.log(this.unescapeHTML(e.content));
+            if(e.type == "login"){
+                document.getElementById("chat_message").innerHTML += " <li><div class='chat_login'><span class='chat_login_span'>" + e.client_name+"加入聊天室"+ "</span></div></li>";
+            }else if(e.type=="logout"){
+                document.getElementById("chat_message").innerHTML += " <li><div class='chat_login'><span class='chat_login_span'>" + e.from_client_name+"离开聊天室"+ "</span></div></li>";
+            }else{
+                document.getElementById("chat_message").innerHTML += "<li><p>"+e.from_client_name+" "+e.time+"</p><div class='chat_div'>"+this.unescapeHTML(e.content)+"</div></li>";
+            }
+            $('.showchat_body').scrollTop( $('.showchat_body')[0].scrollHeight);
         },
         websocketsend(msg){//数据发送
             this.ws.send(msg);
@@ -96,6 +105,11 @@ export default {
                  ws.close();
             };
             console.log(123);
+        },
+        unescapeHTML(data){ //解析脚本
+            data = "" + data;
+            console.log(1);
+            return data.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&apos;/g, "'");
         }
     },
     data () {
@@ -108,6 +122,7 @@ export default {
             showSiderInfo01:false,
             user:JSON.parse(sessionStorage.getItem('user')),
             ws: null,
+            roomId: 1
         }
     },
     mounted () {
@@ -115,7 +130,8 @@ export default {
     },
     components: {
         charHeader,
-        chatRoomBody
+        chatRoomBody,
+        VueMarkdown
     }
 }
 </script>

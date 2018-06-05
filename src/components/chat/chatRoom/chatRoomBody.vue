@@ -3,11 +3,8 @@
         <sider v-show="showSider"/>
         <div class="chatBody_something">
             <div class="showchat_body">
-                <ul class="chat_message">
-                    <!-- <li>
-                        <p>Adsionli 2018/5/31 0:13:00</p>
-                        <div>123</div>
-                    </li> -->
+                <ul class="chat_message" id="chat_message">
+                    
                 </ul>
             </div>
             <div class="showchat_input">
@@ -24,7 +21,7 @@
 import sider from '../header/sider';
 import VueMarkdown from 'vue-markdown';
 export default {
-    props: ['showSider'],
+    props: ['showSider','roomId','clientName'],
     components: {
         sider,
         VueMarkdown,
@@ -48,7 +45,8 @@ export default {
     },
     methods: {
         sendMail(){
-            console.log(this.value);
+            this.$emit('sendMessage',JSON.stringify({'type':'say','client_name':this.clientName,'room_id':this.roomId,'to_client_id':'all','content':this.value}));
+            this.value = '';
         },
         $imgAdd(pos, $file){
             var formdata = new FormData();
@@ -64,6 +62,9 @@ export default {
                 this.$refs.md.$img2Url(pos, url.data.response.url);
             })
         }
+    },
+    mounted () {
+        $('.showchat_body').scrollTop( $('.showchat_body')[0].scrollHeight);
     }   
 }
 </script>
@@ -86,7 +87,7 @@ export default {
     height: 30px;
 }
 .chat_message{
-    margin-left: -5px;
+    margin-left: -25px;
     list-style: none;
 }
 .chat_message li p{
@@ -96,11 +97,23 @@ export default {
 .chat_message li{
     margin-top: 15px
 }
-.chat_message li div{
-    margin-left: 10px
-}
 .chat_message li div image{
     width: 150px;
     height: 150px;
+}
+.chat_div{
+    margin-left: 10px;
+}
+.chat_login{
+    text-align:center;
+    background-color:rgb(117,117,117);
+    width: 50%;
+    margin: auto;
+    border-radius: 20px;
+    height:18px;
+    line-height:18px;
+}
+.chat_login .chat_login_span{
+    color: #fff;
 }
 </style>
