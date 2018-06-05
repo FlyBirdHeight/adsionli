@@ -4,14 +4,10 @@
         <div class="chatBody_something">
             <div class="showchat_body">
                 <ul class="chat_message">
-                    <li>
+                    <!-- <li>
                         <p>Adsionli 2018/5/31 0:13:00</p>
                         <div>123</div>
-                    </li>
-                    <li>
-                        <p>Adsionli 2018/5/31 0:13:00</p>
-                        <vue-markdown v-highlight :source="content"></vue-markdown>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
             <div class="showchat_input">

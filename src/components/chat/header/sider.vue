@@ -1,6 +1,6 @@
 <template>
     <div class="chat_siderbar">
-        <div style="z-index: 1050;transform: translateX(0);color: #fff;text-align: center;">
+        <div style="z-index: 1550;transform: translateX(0);color: #fff;text-align: center;">
             
         </div>
     </div>

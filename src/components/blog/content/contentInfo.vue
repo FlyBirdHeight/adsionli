@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-loading="blogInfoWaiting">
         <el-container style="margin:auto;" :style="{width:maxWidth}">
             <el-header style="height:100px">
                 <h1 style="text-align:center">{{blog.title}}</h1>
@@ -82,7 +82,8 @@ export default {
             maxWidth:'755px',
             showTextArea:false,
             comment:'',
-            blog:[]
+            blog:[],
+            blogInfoWaiting:true
         }
     },
     mounted () {
@@ -123,6 +124,7 @@ export default {
         blogInfo(){
             this.axios.get('/api/v1/blog/'+this.$route.params.id).then((res) => {
                 this.blog = res.data.response;
+                this.blogInfoWaiting = false;
             }).catch((error) => {
                 console.log(error);
             })

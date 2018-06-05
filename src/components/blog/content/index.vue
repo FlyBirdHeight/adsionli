@@ -1,5 +1,5 @@
 <template>
-    <div style="text-align:center">
+    <div style="text-align:center" v-loading="blogIndexLoding">
         <el-container style="margin:auto;" :style="{width:maxWidth}" v-for="blog in blogs" :key="blog.id">
             <el-header style="height:100px">
                 <h1 style="text-align:left"><a href="javascript:;" @click="seeAll(blog.id)" class="post-title-link">{{blog.title}}</a></h1>
@@ -57,6 +57,7 @@ export default {
               if(res.data.status == 'success'){
                   this.blogs = res.data.response.blogs;
                   this.blogTotal = res.data.response.number;
+                  this.blogIndexLoding = false;
               }
           }).catch((error) => {
               console.log(error);
@@ -64,9 +65,11 @@ export default {
       },
       handleSizeChange(val){
         this.blogSize = val;
+        this.blogIndexLoding = true;
         this.blogsAll(this.currentPage4,this.blogSize);
       },
       handleCurrentChange(val){
+        this.blogIndexLoding = true;
         this.blogsAll(this.currentPage4,this.blogSize);
       },
   },
@@ -78,6 +81,7 @@ export default {
         currentPage4: 1,
         blogTotal:20,
         blogSize:10,
+        blogIndexLoding:true,
       }
   },
   mounted () {
