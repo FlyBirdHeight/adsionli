@@ -126,6 +126,7 @@ export default {
         }
     },
     mounted () {
+        // console.log(this.ws.OPEN);
         this.initWebsocket();
     },
     components: {
