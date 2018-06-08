@@ -25,7 +25,7 @@
             </el-aside>
             <el-container>
                 <el-header style="height:50px;padding:0 0">
-                    <charHeader :showName="showName" @showSiderInfo="showSiderInfo"></charHeader>
+                    <charHeader :showName="showName" @showSiderInfo="showSiderInfo" @addRoom='addRoom'></charHeader>
                 </el-header>
                 <el-main style="padding:0">
                     <chat-room-body :showSider='showSiderInfo01' :roomId='roomId' :clientName='user.name' @sendMessage="websocketsend" />
@@ -110,6 +110,9 @@ export default {
             data = "" + data;
             console.log(1);
             return data.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&apos;/g, "'");
+        },
+        addRoom(data){
+            this.rooms.splice(0,0,data)
         }
     },
     data () {
@@ -122,12 +125,23 @@ export default {
             showSiderInfo01:false,
             user:JSON.parse(sessionStorage.getItem('user')),
             ws: null,
-            roomId: 1
+            roomId: 1,
+            rooms:[]
         }
     },
     mounted () {
         // console.log(this.ws.OPEN);
         this.initWebsocket();
+        if(this.user != null){
+            this.axios.get('/api/v1/chatRoom/'.this.user.id).then((res) => {
+                if(res.data.status == 'success'){
+                    console.log(res.data);
+                    this.rooms = res.data.response;
+                }
+            }).catch((error) => {
+                console.log(error);
+            })
+        }
     },
     components: {
         charHeader,
