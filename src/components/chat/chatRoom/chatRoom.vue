@@ -47,8 +47,9 @@ export default {
             this.showName = vechar;
             this.ws.send(JSON.stringify({'type':'login','room_id':1,'client_name':this.user.name}));
         },
-        addRoom(){
+        addRoom(data){
             console.log('addRoom');
+            this.rooms.splice(1,0,data);
         },
         showSiderInfo(data){
             this.showSiderInfo01 = data;
