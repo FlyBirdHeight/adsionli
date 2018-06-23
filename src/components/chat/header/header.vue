@@ -31,6 +31,18 @@
                         inactive-text="否">
                     </el-switch>
                 </el-form-item>
+                <el-form-item label="群头像：">
+                    <el-upload
+                        class="avatar-uploader"
+                        action="/api/v1/upload/picture"
+                        :on-success="handleAvatarSuccess"
+                        name="picture"
+                        :show-file-list="false"
+                        >
+                        <img v-if="form.image" :src="form.image" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormAddRoom = false">取 消</el-button>
@@ -59,6 +71,7 @@ export default {
                 name:'',
                 max_user_count:2,
                 agree:false,
+                image:''
             },
             rules: {
                 name: [ 
@@ -88,13 +101,16 @@ export default {
                 this.width = "80%"
             }
         },
+        handleAvatarSuccess(res, file){
+            this.form.image = res.response;
+        },
         submitEdit(formName){
             this.loadingAddRoom = true;
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     let data = this.form;
                     this.axios.post('/api/v1/add/room',{
-                        'name':data.name,'max_user_count':data.max_user_count,'user_id':data.user_id,'agree':data.agree==true?'1':'0'
+                        'name':data.name,'max_user_count':data.max_user_count,'user_id':data.user_id,'agree':data.agree==true?'1':'0','avatar':data.image
                     }).then((res) => {
                         if(res.data.status=='success'){
                             this.$notify({
@@ -142,5 +158,31 @@ export default {
     float: right;
     line-height: 50px;
     margin-right: 10px
+}
+.avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+}
+.avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+}
+.avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+}
+input[type=file] {
+    display: none;
 }
 </style>

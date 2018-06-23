@@ -92,7 +92,7 @@ export default {
 }
 .chat_message li p{
     font-size: 15px;
-    font-weight: bolder
+    /* font-weight: bolder */
 }
 .chat_message li{
     margin-top: 15px
