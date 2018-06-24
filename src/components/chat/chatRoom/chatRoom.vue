@@ -20,19 +20,19 @@
                         <div class="chatLine-inline" style="width:45%;font-weight:600;font-size:14px;margin-top:-10px">
                             <span style="margin-top:-10px">公频</span>
                         </div>
-                        <span class="badge" style="background-color:rgb(245,108,108)">4</span>
+                        <span class="badge" style="background-color:rgb(245,108,108)" v-if="unread_count!=0">{{unread_count}}</span>
                         <el-button type="info" icon="el-icon-close" circle style="right:-20px;width: 15px;height: 15px;margin-left: -10px;position: relative;top: -5px;" :class="btn_active==1?'':'showButton'"></el-button>
                     </div>
                     
-                    <div v-for="room in rooms" :key="room.id">
-                        <div class="charLine" @click="chatRoomChat(room.id,room.name)" :class="active==room.id?'charLineActive':''">
+                    <div v-for="(room,key , index) in rooms">
+                        <div class="charLine" @click="chatRoomChat(room.id,room.name,key)" :class="active==room.id?'charLineActive':''">
                             <div class="chatLine-inline">
                                 <img :src="room.avatar" alt="64*64" width="50px" height="50px" style="border-radius: 50%; border: 2px solid rgb(217, 217, 217);">
                             </div>
                             <div class="chatLine-inline" style="width:45%;font-weight:600;font-size:14px;margin-top:-10px">
                                 <span style="margin-top:-10px">{{room.name}}</span>
                             </div>
-                            <span class="badge" style="background-color:rgb(245,108,108)">{{room.unread}}</span>
+                            <span class="badge" style="background-color:rgb(245,108,108)" v-if="room.unread!=0">{{room.unread}}</span>
                             <el-button type="info" icon="el-icon-close" circle style="right:-20px;width: 15px;height: 15px;margin-left: -10px;position: relative;top: -5px;" :class="btn_active==room.id?'':'showButton'"></el-button>
                         </div>
                     </div>
@@ -57,11 +57,33 @@ import VueMarkdown from 'vue-markdown';
 import websock from '../../chat.js';
 export default {
     methods: {
-        chatRoomChat(data,vechar){
+        chatRoomChat(data,vechar,room){
             this.active = data;
             this.btn_active = data;
             this.showName = vechar;
-            this.ws.send(JSON.stringify({'type':'login','room_id':data,'client_name':this.user.name}));
+            this.roomId = data;
+            console.log(this.roomId+"|");
+            if(data==1){
+                if(this.all_login == false){
+                    this.ws.send(JSON.stringify({'type':'login','room_id':data,'client_name':this.user.name}));
+                    this.all_login = true;
+                }
+            }else{
+                if(this.rooms[room].login == false){
+                    this.ws.send(JSON.stringify({'type':'login','room_id':data,'client_name':this.user.name}));
+                    this.rooms[room].login = true;
+                }
+            }
+            var ul = document.getElementById("chat_message");  
+            while(ul.hasChildNodes()) 
+            {  
+                ul.removeChild(ul.firstChild);  
+            }
+            if(data == 1){
+                this.unread_count = 0;
+            }else{
+                this.rooms[room].unread = 0;
+            }
         },
         addRoom(data){
             console.log('addRoom');
@@ -70,41 +92,55 @@ export default {
         showSiderInfo(data){
             this.showSiderInfo01 = data;
         },
-        threadPoxi(){  // 实际调用的方法
-            //若是ws开启状态
-            if (this.ws.readyState === this.ws.OPEN) {
-                this.websocketsend(this.msg)
-            }
-            // 若是 正在开启状态，则等待300毫秒
-            else if (this.ws.readyState === this.ws.CONNECTING) {
-                let that = this;//保存当前对象this
-                setTimeout(function () {
-                    that.websocketsend(this.msg)
-                }, 300);
-            }
-            // 若未开启 ，则等待500毫秒
-            else {
-                this.initWebSocket();
-                let that = this;//保存当前对象this
-                setTimeout(function () {
-                    that.websocketsend(this.msg)
-                }, 500);
-            }
-        },
         websocketonmessage(e){ //数据接收
             e = JSON.parse(e.data);
-            console.log(this.unescapeHTML(e.content));
+            console.log(e);
             if(e.type == "login"){
-                document.getElementById("chat_message").innerHTML += " <li><div class='chat_login'><span class='chat_login_span'>" + e.client_name+"加入聊天室"+ "</span></div></li>";
+                if(this.active == e.room_id){
+                    document.getElementById("chat_message").innerHTML += " <li><div class='chat_login'><span class='chat_login_span'>" + e.client_name+"加入聊天室"+ "</span></div></li>";
+                }else if(e.room_id == 1){
+                    this.unread_count++;
+                }else{
+                    for(var i=0;i<this.rooms.length;i++){
+                        if(this.rooms[i].id==e.room_id){
+                            this.rooms[i].unread++;
+                            break;
+                        }
+                    }
+                }
             }else if(e.type=="logout"){
-                document.getElementById("chat_message").innerHTML += " <li><div class='chat_login'><span class='chat_login_span'>" + e.from_client_name+"离开聊天室"+ "</span></div></li>";
+                if(this.active == e.room_id){
+                    document.getElementById("chat_message").innerHTML += " <li><div class='chat_login'><span class='chat_login_span'>" + e.from_client_name+"离开聊天室"+ "</span></div></li>";
+                }else if(e.room_id == 1){
+                    this.unread_count++;
+                }else{
+                    for(var i=0;i<this.rooms.length;i++){
+                        if(this.rooms[i].id==e.room_id){
+                            this.rooms[i].unread++;
+                            break;
+                        }
+                    }
+                }
             }else{
-                document.getElementById("chat_message").innerHTML += "<li><p>"+e.from_client_name+" "+e.time+"</p><div class='chat_div'>"+this.unescapeHTML(e.content)+"</div></li>";
+                console.log(this.active+"||"+e.room_id)
+                if(this.active == e.room_id){
+                    document.getElementById("chat_message").innerHTML += "<li><p>"+e.from_client_name+" "+e.time+"</p><div class='chat_div'>"+this.unescapeHTML(e.content)+"</div></li>";
+                }else if(e.room_id == 1){
+                    this.unread_count++;
+                }else{
+                    for(var i=0;i<this.rooms.length;i++){
+                        if(this.rooms[i].id==e.room_id){
+                            this.rooms[i].unread++;
+                            console.log("room:"+this.rooms[i].id+",unread_count:"+this.rooms[i].unread);
+                            break;
+                        }
+                    }
+                }
             }
             $('.showchat_body').scrollTop( $('.showchat_body')[0].scrollHeight);
         },
         websocketsend(msg){//数据发送
-            console.log(this.ws);
+            console.log(msg);
             this.ws.send(msg);
         },
         websocketclose(e){  //关闭
@@ -137,11 +173,12 @@ export default {
             ws: websock,
             roomId: 1,
             rooms:[],
-            unread_count:0
+            unread_count:0,
+            all_login:false
         }
     },
     beforeMount () {
-        console.log(this.ws);
+        // console.log(this.ws);
     },
     mounted(){
         this.ws.onmessage = this.websocketonmessage;
@@ -150,8 +187,9 @@ export default {
                 if(res.data.status == 'success'){
                     this.rooms = res.data.response;
                     for(var i=0;i<this.rooms.length;i++){
-                        console.log(this.rooms[i].id);
                         this.rooms[i].unread = 0;
+                        this.rooms[i].login = false;
+                        // console.log(this.rooms[i])
                     }
                 }
             }).catch((error) => {

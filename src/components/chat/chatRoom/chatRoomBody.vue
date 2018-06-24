@@ -40,7 +40,6 @@ export default {
                 code: true, // code
                 htmlcode: true,
             },
-            content:'![11.jpg](http://127.0.0.1/images/152785613311.jpg)'
         }
     },
     methods: {
