@@ -94,7 +94,7 @@ export default {
         },
         websocketonmessage(e){ //数据接收
             e = JSON.parse(e.data);
-            console.log(e);
+            console.log(e.content);
             if(e.type == "login"){
                 if(this.active == e.room_id){
                     document.getElementById("chat_message").innerHTML += " <li><div class='chat_login'><span class='chat_login_span'>" + e.client_name+"加入聊天室"+ "</span></div></li>";
@@ -103,7 +103,9 @@ export default {
                 }else{
                     for(var i=0;i<this.rooms.length;i++){
                         if(this.rooms[i].id==e.room_id){
-                            this.rooms[i].unread++;
+                            this.rooms[i].unread = this.rooms[i].unread+1;
+                            var count = this.rooms[i].unread;
+                            this.$set(this.rooms, i.unread, count)
                             break;
                         }
                     }
@@ -116,7 +118,9 @@ export default {
                 }else{
                     for(var i=0;i<this.rooms.length;i++){
                         if(this.rooms[i].id==e.room_id){
-                            this.rooms[i].unread++;
+                            this.rooms[i].unread = this.rooms[i].unread+1;
+                            var count = this.rooms[i].unread;
+                            this.$set(this.rooms, i.unread, count)
                             break;
                         }
                     }
@@ -130,8 +134,8 @@ export default {
                 }else{
                     for(var i=0;i<this.rooms.length;i++){
                         if(this.rooms[i].id==e.room_id){
-                            this.rooms[i].unread++;
-                            console.log("room:"+this.rooms[i].id+",unread_count:"+this.rooms[i].unread);
+                            this.rooms[i].unread = this.rooms[i].unread+1;
+                            this.$set(this.rooms, i, this.rooms[i])   
                             break;
                         }
                     }
