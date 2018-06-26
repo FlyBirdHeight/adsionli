@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="notify">
     <el-tabs :tab-position="tabPosition" style="height: auto;margin-top:30px;margin-left:100px">
       <el-tab-pane label="未读消息">
           <unreadNotify :userId="user.id"></unreadNotify> 
@@ -42,7 +42,7 @@ export default {
 </script>
 
 <style>
-.el-tabs--left .el-tabs__item.is-left {
+.notify .el-tabs--left .el-tabs__item.is-left {
     height: 150px;
     line-height: 150px;
 }
