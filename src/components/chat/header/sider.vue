@@ -14,12 +14,35 @@
             :visible.sync="centerDialogVisible"
             width="30%"
             :modal="false"
-            center>
+            center
+            >
+            <el-dialog
+                width="25%"
+                :visible.sync="userInfoSee"
+                :modal="false"
+                append-to-body
+                >
+
+            </el-dialog>
+
             <el-tabs type="border-card" v-model="roomSeeing" @tab-click="clickRoomSeeing">
                 <el-tab-pane label="群首页" name="first">
                     <div>
-                        <div style="height:100px;border-bottom:1px solid rgb(217,217,217);line-height:96px;text-align:center" >
-                            <img :src="roomInfo.avatar" alt="90*90" width="90" height="90">
+                        <div style="height:100px;border-bottom:1px solid rgb(217,217,217);line-height:96px" >
+                            <img :src="roomInfo.avatar" alt="90*90" width="90" height="90" style="margin-left:20px">
+                        </div>
+                        <div style="margin-top:15px">
+                            <div style="font-size:14px;">
+                                <span style="color:rgb(177,177,177)">群介绍：</span>
+                                <p>本群创建于{{roomInfo.created_at}}：{{roomInfo.description==""?"群主很懒,什么都没有留下":roomInfo.description}}</p>
+                            </div>
+                            <div style="font-size:14px;">
+                                <span style="color:rgb(177,177,177)">群主：</span>
+                                <div @click="showUserInfo(admin.id)" style="cursor: pointer">
+                                    <img :src="admin.avatar" alt="45*45" width="45" height="45" style="border-radius:50%">
+                                    <span style="font-weight:600">{{admin.name}}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </el-tab-pane>
@@ -27,7 +50,6 @@
 
                 </el-tab-pane>
             </el-tabs>
-            
         </el-dialog>
     </div>
 </template>
@@ -40,7 +62,10 @@ export default {
             isCollapse: true,
             centerDialogVisible:false,
             roomInfo:[],
-            roomSeeing:'first'
+            roomSeeing:'first',
+            admin:[],
+            userInfoSee:false,
+            userInfo:[]
         };
     },
     methods: {
@@ -52,8 +77,10 @@ export default {
         },
         clickSee(){
             this.axios.get('/api/v1/room/info/'+this.roomId).then((res) => {
-                console.log(res.data);
                 this.roomInfo = res.data.response.room;
+                var date = new Date(this.roomInfo.created_at);
+                this.roomInfo.created_at = date.getFullYear()+"-"+(date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1)+"-"+(date.getDate()<10?'0'+date.getDate():date.getDate())
+                this.admin = this.roomInfo.admin;
                 this.centerDialogVisible = true;
             }).catch((error) => {
                 console.log(error);
@@ -63,7 +90,7 @@ export default {
 
         },
         clickInvitation(){
-
+            $("#roomInfo").modal("toggle");
         },
         clickOut(){
 
@@ -73,6 +100,16 @@ export default {
         },
         clickRoomSeeing(tab, event) {
             console.log(tab, event);
+        },
+        showUserInfo(id){
+            this.axios.get('/api/v1/user/info/'+id).then((res) => {
+                this.userInfo = res.data.response;
+                this.userInfoSee = true;
+
+                // console.log(res.data.response);
+            }).catch((error) => {
+                console.log(error);
+            })
         }
     },
     mounted(){

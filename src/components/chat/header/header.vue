@@ -182,7 +182,10 @@ export default {
     height: 178px;
     display: block;
 }
-.el-upload .el-upload--text input[type=file] {
+.el-upload__input {
+    display: none
+}
+.el-upload input[type=file] {
     display: none;
 }
 </style>
