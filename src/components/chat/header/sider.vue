@@ -57,14 +57,16 @@
                 </el-tab-pane>
             </el-tabs>
         </el-dialog>
+        <set-nick-name :setNickName="setNickName" @showNickName="showNickName" :roomId="roomId" :userId="userId" :nickName="nickName"></set-nick-name>
     </div>
 </template>
 
 <script>
 import UserListInfo from '../user/userList'
 import UserCard from '../user/userCard'
+import SetNickName from '../utils/setNickName'
 export default {
-    props:['roomId'],
+    props:['roomId','nickName'],
     data() {
         return {
             isCollapse: true,
@@ -74,12 +76,15 @@ export default {
             admin:[],
             userInfoSee:false,
             userInfo:[],
-            userList:[]
+            userList:[],
+            setNickName:false,
+            userId:JSON.parse(sessionStorage.getItem('user')).id,
         };
     },
     components: {
         UserListInfo,
-        UserCard
+        UserCard,
+        SetNickName
     },
     methods: {
         handleOpen(key, keyPath) {
@@ -101,7 +106,7 @@ export default {
             })
         },
         clickSetName(){
-
+            this.setNickName = true;
         },
         clickInvitation(){
             $("#roomInfo").modal("toggle");
@@ -113,19 +118,20 @@ export default {
 
         },
         clickRoomSeeing(tab, event) {
-            console.log(tab, event);
+
         },
         showUserInfo(id){
             this.axios.get('/api/v1/user/info/'+id).then((res) => {
                 this.userInfo = res.data.response;
                 this.userInfoSee = true;
-
                 // console.log(res.data.response);
             }).catch((error) => {
                 console.log(error);
             })
         },
-
+        showNickName(data){
+            this.setNickName = data;
+        }
     },
     mounted(){
         console.log(this.roomId);

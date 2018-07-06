@@ -43,7 +43,7 @@
                     <charHeader :showName="showName" @showSiderInfo="showSiderInfo" @addRoom='addRoom'></charHeader>
                 </el-header>
                 <el-main style="padding:0">
-                    <chat-room-body :showSider='showSiderInfo01' :roomId='roomId' :clientName='user.name' @sendMessage="websocketsend" />
+                    <chat-room-body :showSider='showSiderInfo01' :roomId='roomId' :clientName='nickName' @sendMessage="websocketsend" />
                 </el-main>
             </el-container>
         </el-container>
@@ -62,15 +62,17 @@ export default {
             this.btn_active = data;
             this.showName = vechar;
             this.roomId = data;
-            console.log(this.roomId+"|");
+            this.findRoom(data);
             if(data==1){
+                this.nickName = this.user.name;
                 if(this.all_login == false){
-                    this.ws.send(JSON.stringify({'type':'login','room_id':data,'client_name':this.user.name}));
+                    this.ws.send(JSON.stringify({'type':'login','room_id':data,'client_name':this.nickName}));
                     this.all_login = true;
+                    sessionStorage.setItem('all_login',this.all_login);
                 }
             }else{
                 if(this.rooms[room].login == false){
-                    this.ws.send(JSON.stringify({'type':'login','room_id':data,'client_name':this.user.name}));
+                    this.ws.send(JSON.stringify({'type':'login','room_id':data,'client_name':this.nickName}));
                     this.rooms[room].login = true;
                 }
             }
@@ -83,6 +85,7 @@ export default {
                 this.unread_count = 0;
             }else{
                 this.rooms[room].unread = 0;
+                sessionStorage.setItem('rooms',JSON.stringify(this.rooms));
             }
         },
         addRoom(data){
@@ -126,7 +129,7 @@ export default {
                     }
                 }
             }else{
-                console.log(this.active+"||"+e.room_id)
+                console.log(this.active+"||"+e.room_id+"||"+e.from_client_name)
                 if(this.active == e.room_id){
                     document.getElementById("chat_message").innerHTML += "<li><p>"+e.from_client_name+" "+e.time+"</p><div class='chat_div'>"+this.unescapeHTML(e.content)+"</div></li>";
                 }else if(e.room_id == 1){
@@ -163,6 +166,16 @@ export default {
         },
         addRoom(data){
             this.rooms.splice(0,0,data)
+        },
+        findRoom(id){
+            for(var i=0;i<this.rooms.length;i++){
+                if(this.rooms[i].id == id){
+                    this.nickName = this.rooms[i].pivot.nick_name;
+                }
+            }
+            if(this.nickName==""){
+                this.nickName = this.user.name;
+            }
         }
     },
     data () {
@@ -178,27 +191,33 @@ export default {
             roomId: 1,
             rooms:[],
             unread_count:0,
-            all_login:false
+            all_login:sessionStorage.getItem('all_login')==null?false:sessionStorage.getItem('all_login'),
+            nickName:""
         }
     },
     beforeMount () {
-        // console.log(this.ws);
+        console.log(this.ws);
     },
     mounted(){
         this.ws.onmessage = this.websocketonmessage;
         if(this.user != null){
-            this.axios.get('/api/v1/chatRoom/'+this.user.id).then((res) => {
-                if(res.data.status == 'success'){
-                    this.rooms = res.data.response;
-                    for(var i=0;i<this.rooms.length;i++){
-                        this.rooms[i].unread = 0;
-                        this.rooms[i].login = false;
-                        // console.log(this.rooms[i])
+            if(sessionStorage.getItem('rooms')!=null){
+                this.rooms = JSON.parse(sessionStorage.getItem('rooms'))
+                console.log(this.rooms);
+            }else{
+                this.axios.get('/api/v1/chatRoom/'+this.user.id).then((res) => {
+                    if(res.data.status == 'success'){
+                        this.rooms = res.data.response;
+                        for(var i=0;i<this.rooms.length;i++){
+                            this.rooms[i].unread = 0;
+                            this.rooms[i].login = false;
+                        }
+                        sessionStorage.setItem('rooms',JSON.stringify(this.rooms));
                     }
-                }
-            }).catch((error) => {
-                console.log(error);
-            })
+                }).catch((error) => {
+                    console.log(error);
+                })
+            }
         }
         
     },

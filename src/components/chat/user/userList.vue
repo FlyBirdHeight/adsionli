@@ -15,7 +15,7 @@
             </template>
         </el-table-column>
         <el-table-column
-            prop="name"
+            prop="pivot.nick_name"
             label="群名片"
             >
         </el-table-column>
@@ -31,9 +31,6 @@
 <script>
 export default {
     props: ['userList','roomInfo'],
-    mounted(){
-        console.log(this.userList);
-    },
     methods: {
         showUserInfo(id){
             console.log(id)

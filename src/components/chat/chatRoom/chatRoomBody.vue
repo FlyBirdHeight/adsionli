@@ -1,6 +1,6 @@
 <template>
     <div style="height:100%">
-        <sider v-show="showSider" :roomId="roomId" />
+        <sider v-show="showSider" :roomId="roomId" :nickName="clientName" />
         <div class="chatBody_something">
             <div class="showchat_body">
                 <ul class="chat_message" id="chat_message">
