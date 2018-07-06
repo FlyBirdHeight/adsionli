@@ -24,28 +24,7 @@
                 append-to-body
                 center
                 >
-                <div style="text-align:center">
-                    <img :src="userInfo.avatar" alt="100*100" width="100" height="100" style="border-radius:50%">
-                </div>
-                <div style="color:rgb(167,167,167);font-size:13px;text-align:center;margin-top:15px">
-                    <p>{{userInfo.description==""?"这个人有那么点点懒，没有自我介绍呢~":userInfo.description}}</p>
-                </div>
-                <div style="text-align:center;margin-top:15px;font-size:13px">
-                    <ul style="list-style-type:none;">
-                        <li style="margin-left:-40px;margin-top:10px">
-                            <span style="color:rgb(167,167,167)">昵称：<font style="color:black">{{userInfo.name}}</font></span>
-                        </li>
-                        <li style="margin-left:-40px;margin-top:10px">
-                            <span style="color:rgb(167,167,167)">邮箱：<font style="color:black">{{userInfo.email}}</font></span>
-                        </li>
-                        <li style="margin-left:-40px;margin-top:10px">
-                            <span style="color:rgb(167,167,167)">性别：<font style="color:black">{{userInfo.sex}}</font></span>
-                        </li>
-                        <li style="margin-left:-40px;margin-top:10px">
-                            <span style="color:rgb(167,167,167)">年龄：<font style="color:black">{{userInfo.age}}</font></span>
-                        </li>
-                    </ul>
-                </div>
+                <user-card :userInfo="userInfo"></user-card>
                 <div slot="footer" >
                     <el-button @click="setChat(userInfo.id)">发起聊天</el-button>
                     <el-button type="primary" @click="follower(userInfo.id)">加为好友</el-button>
@@ -74,7 +53,7 @@
                     </div>
                 </el-tab-pane>
                 <el-tab-pane label="成员列表" name="second">
-
+                    <user-list-info :userList="userList" :roomInfo="roomInfo"></user-list-info>
                 </el-tab-pane>
             </el-tabs>
         </el-dialog>
@@ -82,6 +61,8 @@
 </template>
 
 <script>
+import UserListInfo from '../user/userList'
+import UserCard from '../user/userCard'
 export default {
     props:['roomId'],
     data() {
@@ -92,8 +73,13 @@ export default {
             roomSeeing:'first',
             admin:[],
             userInfoSee:false,
-            userInfo:[]
+            userInfo:[],
+            userList:[]
         };
+    },
+    components: {
+        UserListInfo,
+        UserCard
     },
     methods: {
         handleOpen(key, keyPath) {
@@ -108,6 +94,7 @@ export default {
                 var date = new Date(this.roomInfo.created_at);
                 this.roomInfo.created_at = date.getFullYear()+"-"+(date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1)+"-"+(date.getDate()<10?'0'+date.getDate():date.getDate())
                 this.admin = this.roomInfo.admin;
+                this.userList = this.roomInfo.user_list;
                 this.centerDialogVisible = true;
             }).catch((error) => {
                 console.log(error);
@@ -138,12 +125,7 @@ export default {
                 console.log(error);
             })
         },
-        setChat(id){
-            console.log(id);
-        },
-        follower(id){
-            console.log(id)
-        }
+
     },
     mounted(){
         console.log(this.roomId);
