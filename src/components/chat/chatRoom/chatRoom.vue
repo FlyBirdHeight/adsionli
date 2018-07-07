@@ -55,6 +55,7 @@ import charHeader from '../header/header';
 import chatRoomBody from '../chatRoom/chatRoomBody'
 import VueMarkdown from 'vue-markdown';
 import websock from '../../chat.js';
+import test from '../../utils/text.js';
 export default {
     methods: {
         chatRoomChat(data,vechar,room){
@@ -192,11 +193,12 @@ export default {
             rooms:[],
             unread_count:0,
             all_login:sessionStorage.getItem('all_login')==null?false:sessionStorage.getItem('all_login'),
-            nickName:""
+            nickName:"",
+            test01:test
         }
     },
     beforeMount () {
-        console.log(this.ws);
+        console.log(this.test01.getWS(this.ws));
     },
     mounted(){
         this.ws.onmessage = this.websocketonmessage;
@@ -219,7 +221,6 @@ export default {
                 })
             }
         }
-        
     },
     components: {
         charHeader,
