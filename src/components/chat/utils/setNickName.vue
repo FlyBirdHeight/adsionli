@@ -58,9 +58,10 @@ export default {
             }
         }
     },
-    mounted(){
-        // this.form.name = this.nickName;
-        // console.log(123)
+    watch: {
+        nickName(val){
+            this.form.name = val;
+        }
     }
 }
 </script>

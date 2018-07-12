@@ -55,7 +55,7 @@
 <script>
 import Bus from '../../Bus.js'
 export default {
-    props: ['showName'],
+    props: ['showName','showSider'],
     data () {
         var name = (rule, value, callback) => {
             if (value === '') {
@@ -65,7 +65,7 @@ export default {
             }
         };
         return {
-            showSider:false,
+            showSiderHeader:this.showSider,
             form:{
                 user_id:JSON.parse(sessionStorage.getItem('user')).id,
                 name:'',
@@ -85,8 +85,8 @@ export default {
     },
     methods: {
         showSiderSetting(){
-            this.showSider = !this.showSider;          
-            this.$emit('showSiderInfo',this.showSider);
+            this.showSiderHeader = !this.showSider;          
+            this.$emit('showSiderInfo',this.showSiderHeader);
         },
         addRoom(){
             this.dialogFormAddRoom = true;

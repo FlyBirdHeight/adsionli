@@ -12,7 +12,6 @@
                     </div>
                 </div>
                 <div class="charLine_out">
-                    
                     <div class="charLine" @click="chatRoomChat(1,'公频')" :class="active==1?'charLineActive':''">
                         <div class="chatLine-inline">
                             <img src="http://p53z0yfgy.bkt.clouddn.com/cat.gif" alt="64*64" width="50px" height="50px" style="border-radius: 50%; border: 2px solid rgb(217, 217, 217);">
@@ -40,7 +39,7 @@
             </el-aside>
             <el-container>
                 <el-header style="height:50px;padding:0 0">
-                    <charHeader :showName="showName" @showSiderInfo="showSiderInfo" @addRoom='addRoom'></charHeader>
+                    <charHeader :showName="showName" @showSiderInfo="showSiderInfo" @addRoom='addRoom' :showSider='showSiderInfo01'></charHeader>
                 </el-header>
                 <el-main style="padding:0">
                     <chat-room-body :showSider='showSiderInfo01' :roomId='roomId' :clientName='nickName' @sendMessage="websocketsend" />
@@ -63,7 +62,7 @@ export default {
             this.btn_active = data;
             this.showName = vechar;
             this.roomId = data;
-            this.findRoom(data);
+            this.showSiderInfo01 = false;
             if(data==1){
                 this.nickName = this.user.name;
                 if(this.all_login == false){
@@ -72,6 +71,7 @@ export default {
                     sessionStorage.setItem('all_login',this.all_login);
                 }
             }else{
+                this.findRoom(data);
                 if(this.rooms[room].login == false){
                     this.ws.send(JSON.stringify({'type':'login','room_id':data,'client_name':this.nickName}));
                     this.rooms[room].login = true;
@@ -194,7 +194,8 @@ export default {
             unread_count:0,
             all_login:sessionStorage.getItem('all_login')==null?false:sessionStorage.getItem('all_login'),
             nickName:"",
-            test01:test
+            test01:test,
+
         }
     },
     beforeMount () {

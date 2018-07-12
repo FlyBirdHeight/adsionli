@@ -64,6 +64,12 @@ export default {
     },
     mounted () {
         $('.showchat_body').scrollTop( $('.showchat_body')[0].scrollHeight);
+    },
+    watch: {
+        clientName(val){
+            this.clientName = val;
+            // console.log(this.clientName);
+        }
     }   
 }
 </script>
